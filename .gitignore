@@ -1,0 +1,39 @@
+# Environment variables
+.env
+*.env
+
+# Python
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Python build files
+build/
+dist/
+*.egg-info/
+
+# Node modules
+frontend/node_modules/
+node_modules/
+
+# Frontend build
+frontend/dist/
+dist/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Test/cache files
+.pytest_cache/
+.coverage
+htmlcov/
