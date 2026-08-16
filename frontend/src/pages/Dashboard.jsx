@@ -42,8 +42,21 @@ function Dashboard() {
     }
   }, [navigate]);
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      // attempt to notify backend so refresh token/session are revoked
+      await fetch(`${import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000'}/auth/logout`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+    } catch (err) {
+      // ignore network errors
+    }
+
     localStorage.removeItem("token");
+    localStorage.removeItem("refresh_token");
     navigate("/");
   };
 

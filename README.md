@@ -10,6 +10,8 @@ SmartHealth Auth provides secure authentication and role-based access for health
 
 - User registration with role selection
 - Secure login using JWT authentication
+- Secure refresh-token rotation (refresh tokens with rotation and expiration)
+- Rate limiting on authentication endpoints (login/register/google login)
 - Password hashing using BCrypt
 - Google OAuth login
 - Role-Based Access Control (RBAC)
@@ -17,10 +19,11 @@ SmartHealth Auth provides secure authentication and role-based access for health
 - Protected React routes
 - JWT expiration validation
 - Automatic login using stored JWT
-- Secure logout
+- Secure logout and session revocation
 - User session tracking
 - Role-specific dashboards
 - MySQL database integration
+- Automated authentication/RBAC tests (pytest)
 
 ---
 
@@ -246,10 +249,25 @@ http://localhost:5173
 |---|---|---|
 | POST | `/auth/register` | Register a new user |
 | POST | `/auth/login` | Authenticate user and generate JWT |
+| POST | `/auth/refresh` | Exchange refresh token for new access + refresh tokens |
+| POST | `/auth/logout` | Invalidate session and revoke refresh token |
 | GET | `/auth/google/login` | Start Google OAuth login |
 | GET | `/auth/google/callback` | Google OAuth callback |
 | GET | `/health` | Check API health |
 | GET | `/docs` | Open Swagger API documentation |
+
+---
+
+## Testing
+
+Run the backend tests from the backend folder:
+
+```bash
+cd backend
+pytest -q
+```
+
+Current tests in this branch: 6 passed, 1 warning
 
 ---
 
@@ -274,7 +292,6 @@ http://localhost:5173
 
 ## 🔮 Future Improvements
 
-- Refresh tokens
 - Multi-factor authentication
 - Email verification
 - Password reset
@@ -285,8 +302,3 @@ http://localhost:5173
 
 ---
 
-## 👨‍💻 Author
-
-**Varun Reddy**
-
-MSDS | Full-Stack and AI Developer
