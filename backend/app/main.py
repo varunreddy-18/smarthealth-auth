@@ -13,10 +13,22 @@ from app.api.patient import router as patient_router
 from app.api.doctor import router as doctor_router
 from app.api.pharmacist import router as pharmacist_router
 from app.api.sessions import router as session_router
+
+# Rate limiter
+from app.core.limiter import limiter
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
+from slowapi import _rate_limit_exceeded_handler
+
 app = FastAPI(
     title="SmartHealth Auth API",
     version="1.0.0"
 )
+
+# Attach limiter to app state and middleware
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+app.add_middleware(SlowAPIMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
@@ -37,7 +49,13 @@ app.include_router(doctor_router)
 app.include_router(pharmacist_router)
 app.include_router(session_router)
 
-Base.metadata.create_all(bind=engine)
+import os
+import sys
+
+# Create tables only when not running under pytest to avoid touching prod DB during tests
+# Detect pytest by checking sys.modules for 'pytest'
+if "pytest" not in sys.modules and "PYTEST_CURRENT_TEST" not in os.environ:
+    Base.metadata.create_all(bind=engine)
 
 
 @app.get("/")

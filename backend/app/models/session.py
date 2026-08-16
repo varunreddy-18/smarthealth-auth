@@ -21,4 +21,9 @@ class Session(Base):
 
     is_active = Column(Boolean, default=True)
 
+    # Refresh token rotation fields
+    refresh_token_id = Column(String(128), nullable=True, index=True)
+    refresh_token_hash = Column(String(500), nullable=True)
+    refresh_token_expires = Column(DateTime, nullable=True)
+
     user = relationship("User", back_populates="sessions")
